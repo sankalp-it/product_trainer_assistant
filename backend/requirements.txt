@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pdfplumber
+sentence-transformers
+faiss-cpu
+qdrant-client
+ollama
+python-multipart
+chromadb
