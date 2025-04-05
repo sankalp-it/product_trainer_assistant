@@ -1,8 +1,8 @@
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app import summarizer, embedder, vector_store, file_processor
+from app.routes import health, upload, search, summarize
 
-app = FastAPI()
+app = FastAPI(title="AI Summary Assistant", description="Docs for PDF upload, search and summarization API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,16 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    text = file_processor.extract_text(file)
-    summary = summarizer.generate_summary(text)
-    embedding = embedder.embed_text(summary)
-    vector_store.store_vector(embedding, summary)
-    return {"summary": summary}
-
-@app.post("/search")
-async def search(query: str = Form(...)):
-    query_vector = embedder.embed_text(query)
-    results = vector_store.search_vector(query_vector)
-    return {"results": results}
+app.include_router(health.router)
+app.include_router(upload.router)
+app.include_router(search.router)
+app.include_router(summarize.router)

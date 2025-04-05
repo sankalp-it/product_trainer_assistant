@@ -1,0 +1,14 @@
+replicaCount: 1
+
+backend:
+  image: summary-backend:latest
+  port: 8000
+
+frontend:
+  image: summary-frontend:latest
+  port: 3000
+
+chroma:
+  image: ghcr.io/chroma-core/chroma:latest
+  port: 8000
+  storage: 1Gi
