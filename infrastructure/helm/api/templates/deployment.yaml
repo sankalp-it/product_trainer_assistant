@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: summary-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: summary-backend
+  template:
+    metadata:
+      labels:
+        app: summary-backend
+    spec:
+      containers:
+      - name: backend
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy | default "IfNotPresent" }}"
+        ports:
+        - containerPort: 8000
+        env:
+        - name: CHROMA_HOST
+          value: chroma-service
+        - name: CHROMA_PORT
+          value: "8000"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          failureThreshold: 20
+          timeoutSeconds: 5

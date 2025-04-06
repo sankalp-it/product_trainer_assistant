@@ -1,0 +1,12 @@
+replicaCount: 1
+
+image:
+  repository: 216201940479.dkr.ecr.us-east-2.amazonaws.com/starckai-repo
+  tag: ai_summary_assistant_backend-2.4
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources: {}

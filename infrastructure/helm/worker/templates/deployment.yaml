@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chroma
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chroma
+  template:
+    metadata:
+      labels:
+        app: chroma
+    spec:
+      containers:
+      - name: chroma
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+        ports:
+          - containerPort: 8000
+        env:
+          - name: PORT
+            value: "8000"
+          - name: IS_PERSISTENT
+            value: "TRUE"
+        volumeMounts:
+        - name: chroma-storage
+          mountPath: /chroma/.chroma/index
+      volumes:
+        - name: chroma-storage
+          persistentVolumeClaim:
+            claimName: chroma-pvc
+

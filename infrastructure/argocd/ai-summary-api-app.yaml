@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ai-summary-api
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-org/ai-summary-assistant
+    targetRevision: HEAD
+    path: infrastructure/helm/api
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated: {}

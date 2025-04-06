@@ -1,0 +1,19 @@
+frontendVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ai-summary-frontend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-org/ai-summary-assistant
+    targetRevision: HEAD
+    path: infrastructure/helm/frontend
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated: {}
