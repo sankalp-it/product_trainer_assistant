@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chroma
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chroma
+  template:
+    metadata:
+      labels:
+        app: chroma
+    spec:
+      containers:
+      - name: chroma
+        image: ghcr.io/chroma-core/chroma:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: IS_PERSISTENT
+          value: "TRUE"
+        volumeMounts:
+        - name: chroma-storage
+          mountPath: /chroma/.chroma/index
+      volumes:
+      - name: chroma-storage
+        persistentVolumeClaim:
+          claimName: chroma-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chroma-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chroma
+spec:
+  selector:
+    app: chroma
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
