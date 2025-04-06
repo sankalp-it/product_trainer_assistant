@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: summary-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: summary-frontend
+  template:
+    metadata:
+      labels:
+        app: summary-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy | default "IfNotPresent" }}"
+        ports:
+        - containerPort: 3000

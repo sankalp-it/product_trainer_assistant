@@ -6,7 +6,7 @@ chromadb==0.6.1
 python-dotenv
 httpx
 python-multipart
-
 PyMuPDF
-
 sentence-transformers
+pydantic
+requests
